@@ -30,7 +30,7 @@ function setup() {
 
 // [r g b a] r g b a r g b a ...
 function draw() {
-    pg.background(100);
+    // pg.background(100);
    //image(capture, 0, 0, w, h);
      capture.loadPixels();
      var NewPix=capture.pixels;
