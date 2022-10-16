@@ -1,7 +1,7 @@
 
 var originalVideo;
 var pg;
-var kernel=[25,100];
+var kernel=[40,40];
 var kernelSize=kernel[0]*kernel[1];
 var pixToEdit=[];
 var capture;
@@ -13,7 +13,23 @@ var savedRandomR = Math.floor(Math.random() * 255);
 var savedRandomG = Math.floor(Math.random() * 255);
 var savedRandomB = Math.floor(Math.random() * 255);
 
+var lstMatObsc=[];
+
+class MatrixObscura{
+    constructor(startI,kernel){
+        this.startI=startI;
+        this.kernel=kernel;
+        this.kernel.width = kernel[0];
+        this.kernel.height = kernel[1];
+        this.kernel.size=kernel[0]*kernel[1];
+
+        this.pixelDomain=[];
+    }
+
+
+}
 function setup() {
+    var obscuraDistance=200;
     // pg=createGraphics(200,200);
     capture = createCapture({
         audio: false,
@@ -30,6 +46,10 @@ function setup() {
     createCanvas(w,h);
     capture.hide();
     //originalVideo = capture;
+    for (var i = 0; i <= w*h; i+=obscuraDistance) {
+       var block = new MatrixObscura(i,kernel);
+       lstMatObsc.push(block);
+    }
 }
 
 // [r g b a] r g b a r g b a ...
@@ -50,22 +70,19 @@ console.log(capture.pixels.length);
     if (capture.pixels.length > 0) { // don't forget this!
         var total = 0;
         var i = 0;
+ 
+        var start=400;
+    
+        for (var WMover=0;WMover<=(4*kernel[0]);WMover+=4){
+            pixToEdit.push(WMover+start);
 
-
-
-
-        var savedRandomR = Math.floor(Math.random() * 255) -200;
-        // var savedRandomG = Math.floor(Math.random() * 255)-200;
-        // var savedRandomB = Math.floor(Math.random() * 255)-150;
-
-
-        for (var WMover=0;WMover<=4*kernel[0];WMover+=4){
-            pixToEdit.push(WMover);
             for (var HMover=1;HMover<kernel[1];HMover+=1){
-                       pixToEdit.push(WMover + (4*width)*HMover);
+                        // Hmover is the height delta aka how much to move down aka kernel[1](4*width) loops it
+                       pixToEdit.push(WMover+start + (4*width)*HMover); 
+                  
                     }
         }
-
+//console.log(kernelSize,pixToEdit.length);
 
         // for (var L=0;L<capture.pixels.length;L++){
         //         if(Kcount < kernel[1]){
@@ -81,7 +98,7 @@ console.log(capture.pixels.length);
         var bTot=0;
 
         for (var i =0; i<=kernelSize; i++) {
-            var indexPointer=pixToEdit[i];
+            var indexPointer=pixToEdit[i]+start;
             rTot+=capture.pixels[indexPointer];
             gTot+=capture.pixels[indexPointer+1];
             bTot+=capture.pixels[indexPointer+2];
@@ -90,9 +107,9 @@ console.log(capture.pixels.length);
         var gAvg = gTot/kernelSize;
         var bAvg = bTot/kernelSize;
 
-        console.log(rAvg);
+     
         for (var i =0; i< pixToEdit.length; i++) {
-            var indexPointer=pixToEdit[i];
+            var indexPointer=pixToEdit[i]+start;
             capture.pixels[indexPointer]=rAvg;
             capture.pixels[indexPointer+1]=gAvg;
             capture.pixels[indexPointer+2]=bAvg;
@@ -116,6 +133,7 @@ console.log(capture.pixels.length);
         // }
         sinx+=0.01;
         //
+        pixToEdit=[];
         image(capture, 0, 0, w, h);
         capture.pixels=NewPix;
         capture.updatePixels();
