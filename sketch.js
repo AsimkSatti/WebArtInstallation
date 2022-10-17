@@ -17,15 +17,63 @@ var lstMatObsc=[];
 
 class MatrixObscura{
     constructor(startI,kernel){
+
         this.startI=startI;
         this.kernel=kernel;
-        this.kernel.width = kernel[0];
-        this.kernel.height = kernel[1];
-        this.kernel.size=kernel[0]*kernel[1];
+        this.kernelWidth = kernel[0];
+        this.kernelHeight = kernel[1];
+        this.kernelSize=kernel[0]*kernel[1];
 
         this.pixelDomain=[];
+
+        this.rAvg=0;
+        this.gAvg=0;
+        this.bvg=0;
+
     }
 
+    generateRegion(){
+          
+           for (var WMover=0;WMover<(4*this.kernelWidth);WMover+=4){
+            this.pixelDomain.push(WMover+this.startI);
+
+            
+            for (var HMover=0;HMover<this.kernelHeight;HMover+=1){
+                        // Hmover is the height delta aka how much to move down aka kernel[1](4*width) loops it
+                       this.pixelDomain.push(WMover+this.startI + (4*width)*HMover); 
+             
+                    }
+        }
+    }
+    GettingAverageFromRegion(){
+     
+        var rTot=0;
+        var gTot=0;
+        var bTot=0;
+
+        for (var i =0; i<=this.kernelSize; i++) {
+            var indexPointer=this.pixelDomain[i]+this.startI;
+            rTot+=capture.pixels[indexPointer];
+            gTot+=capture.pixels[indexPointer+1];
+            bTot+=capture.pixels[indexPointer+2];
+        }
+        this.rAvg = rTot/this.kernelSize;
+        this.gAvg = gTot/this.kernelSize;
+        this.bAvg = bTot/this.kernelSize;
+        
+     
+        // console.log(rAvg,gAvg,bAvg);
+    }
+    AssigningNewValues(){
+        
+           for (var i =0; i< this.pixelDomain.length; i++) {
+                var indexPointer=this.pixelDomain[i]+this.startI;
+                capture.pixels[indexPointer]=this.rAvg;
+                capture.pixels[indexPointer+1]=this.gAvg;
+                capture.pixels[indexPointer+2]=this.bAvg;
+        }
+
+    }
 
 }
 function setup() {
@@ -74,54 +122,44 @@ function draw() {
 
 
    //
-console.log(capture.pixels.length);
+// console.log(capture.pixels.length);
     if (capture.pixels.length > 0) { // don't forget this!
         var total = 0;
         var i = 0;
- 
-        var start=400;
-    
-        for (var WMover=0;WMover<=(4*kernel[0]);WMover+=4){
-            pixToEdit.push(WMover+start);
+        
+        // console.log(lstMatObsc.length);
+        for (var i =0; i<lstMatObsc.length; i++) {
+            // console.log("fami nani");
+            var MatBlock=lstMatObsc[i];
+        
+            MatBlock.generateRegion();
+            MatBlock.GettingAverageFromRegion();
+            MatBlock.AssigningNewValues();
+            MatBlock.pixelDomain=[];
 
-            for (var HMover=1;HMover<kernel[1];HMover+=1){
-                        // Hmover is the height delta aka how much to move down aka kernel[1](4*width) loops it
-                       pixToEdit.push(WMover+start + (4*width)*HMover); 
-                  
-                    }
         }
-//console.log(kernelSize,pixToEdit.length);
-
-        // for (var L=0;L<capture.pixels.length;L++){
-        //         if(Kcount < kernel[1]){
-        //            pixToEdit.push(i);
-        //            pixToEdit.push(i + (4*w))
-        //         }
-            
-        //    Kcount+=1;
-        //         i += 4;
-        // } 
+      
         var rTot=0;
         var gTot=0;
         var bTot=0;
 
-        for (var i =0; i<=kernelSize; i++) {
-            var indexPointer=pixToEdit[i]+start;
-            rTot+=capture.pixels[indexPointer];
-            gTot+=capture.pixels[indexPointer+1];
-            bTot+=capture.pixels[indexPointer+2];
-        }
-        var rAvg = rTot/kernelSize;
-        var gAvg = gTot/kernelSize;
-        var bAvg = bTot/kernelSize;
+        // for (var i =0; i<=kernelSize; i++) {
+        //     var indexPointer=pixToEdit[i]+start;
+        //     rTot+=capture.pixels[indexPointer];
+        //     gTot+=capture.pixels[indexPointer+1];
+        //     bTot+=capture.pixels[indexPointer+2];
+        // }
+        // var rAvg = rTot/kernelSize;
+        // var gAvg = gTot/kernelSize;
+        // var bAvg = bTot/kernelSize;
 
      
-        for (var i =0; i< pixToEdit.length; i++) {
-            var indexPointer=pixToEdit[i]+start;
-            capture.pixels[indexPointer]=rAvg;
-            capture.pixels[indexPointer+1]=gAvg;
-            capture.pixels[indexPointer+2]=bAvg;
-        }
+        // for (var i =0; i< pixToEdit.length; i++) {
+        //     var indexPointer=pixToEdit[i]+start;
+        //     capture.pixels[indexPointer]=rAvg;
+        //     capture.pixels[indexPointer+1]=gAvg;
+        //     capture.pixels[indexPointer+2]=bAvg;
+        // }
 
         // for (var y = 0; y < h; y++) {
         //     for (var x = 0; x < w; x++) {
