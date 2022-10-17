@@ -120,10 +120,7 @@ function draw() {
 
 
    //Filter
-
-
-   //
-// console.log(capture.pixels.length);
+ 
     if (capture.pixels.length > 0) { // don't forget this!
         var total = 0;
         var i = 0;
@@ -144,40 +141,7 @@ function draw() {
         var gTot=0;
         var bTot=0;
 
-        // for (var i =0; i<=kernelSize; i++) {
-        //     var indexPointer=pixToEdit[i]+start;
-        //     rTot+=capture.pixels[indexPointer];
-        //     gTot+=capture.pixels[indexPointer+1];
-        //     bTot+=capture.pixels[indexPointer+2];
-        // }
-        // var rAvg = rTot/kernelSize;
-        // var gAvg = gTot/kernelSize;
-        // var bAvg = bTot/kernelSize;
-
-     
-        // for (var i =0; i< pixToEdit.length; i++) {
-        //     var indexPointer=pixToEdit[i]+start;
-        //     capture.pixels[indexPointer]=rAvg;
-        //     capture.pixels[indexPointer+1]=gAvg;
-        //     capture.pixels[indexPointer+2]=bAvg;
-        // }
-
-        // for (var y = 0; y < h; y++) {
-        //     for (var x = 0; x < w; x++) {
-                
-        //         NewPix[i]+= (Math.sin(sinx)*50);
-        //           NewPix[i+1]+=Math.sin(sinx)*50;
-        //            NewPix[i+2]+=Math.sin(sinx)*50;
-
-        //           // capture.pixels[i+3]-=savedRandomB;
-  
-
-        //         // console.log(i);
-        //         var redValue = capture.pixels[i];
-        //         total += redValue;
-        //         i += 4;
-        //     }
-        // }
+       
         sinx+=0.01;
         //
         pixToEdit=[];
