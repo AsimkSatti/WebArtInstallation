@@ -29,7 +29,7 @@ class MatrixObscura{
 
 }
 function setup() {
-    var obscuraDistance=200;
+    var obscuraDistance=40;
     // pg=createGraphics(200,200);
     capture = createCapture({
         audio: false,
@@ -46,10 +46,18 @@ function setup() {
     createCanvas(w,h);
     capture.hide();
     //originalVideo = capture;
-    for (var i = 0; i <= w*h; i+=obscuraDistance) {
-       var block = new MatrixObscura(i,kernel);
-       lstMatObsc.push(block);
-    }
+       for (var WMover=0;WMover<=(4*w);WMover+=obscuraDistance){
+            for (var HMover=0;HMover<int(h/kernel[1]);HMover+=1){
+                        // Hmover is the height delta aka how much to move down aka kernel[1](4*width) loops it
+                        var newpos= WMover+(4*width)*(HMover*kernel[1]); 
+                        var block = new MatrixObscura(newpos,kernel);
+                        lstMatObsc.push(block);
+                  }
+                    }
+       //         var block = new MatrixObscura(i,kernel);
+       // lstMatObsc.push(block);
+    
+    console.log(lstMatObsc.length);
 }
 
 // [r g b a] r g b a r g b a ...
