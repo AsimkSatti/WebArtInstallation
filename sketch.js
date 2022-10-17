@@ -1,7 +1,7 @@
 
 var originalVideo;
 var pg;
-var kernel=[40,40];
+var kernel=[20,20];
 var kernelSize=kernel[0]*kernel[1];
 var pixToEdit=[];
 var capture;
@@ -77,7 +77,7 @@ class MatrixObscura{
 
 }
 function setup() {
-    var obscuraDistance=40;
+    var obscuraDistance=15;
     // pg=createGraphics(200,200);
     capture = createCapture({
         audio: false,
@@ -97,8 +97,9 @@ function setup() {
        for (var WMover=0;WMover<=(4*w);WMover+=obscuraDistance){
             for (var HMover=0;HMover<int(h/kernel[1]);HMover+=1){
                         // Hmover is the height delta aka how much to move down aka kernel[1](4*width) loops it
-                        var newpos= WMover+(4*width)*(HMover*kernel[1]); 
+                        var newpos= WMover+(4*width)*HMover*kernel[1]/2; 
                         var block = new MatrixObscura(newpos,kernel);
+                        console.log(newpos, WMover, width, HMover, kernel[1]);
                         lstMatObsc.push(block);
                   }
                     }
