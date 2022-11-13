@@ -1,4 +1,4 @@
- 
+var effectEnabled=false; 
 var originalVideo;
 var pg;
 var kernel=[20,20];
@@ -151,6 +151,17 @@ function setup() {
     console.log(lstMatObsc.length);
 }
 
+function toggleEffect(){
+    effectEnabled=!effectEnabled;
+    if(effectEnabled){
+ 
+        document.getElementById("button").innerHTML = "Start Fun";
+
+    }
+    else{
+        document.getElementById("button").innerHTML = "Stop Fun";
+    }
+}
 // [r g b a] r g b a r g b a ...
 function draw() {
 
@@ -168,6 +179,7 @@ function draw() {
         var i = 0;
         
         // console.log(lstMatObsc.length);
+        if(effectEnabled){
         for (var i =0; i<lstMatObsc.length; i++) {
             // console.log("fami nani");
 
@@ -175,10 +187,11 @@ function draw() {
         
              MatBlock.generateRegion();
              MatBlock.GettingAverageFromRegion();
-              MatBlock.AssigningNewValues();
+             MatBlock.AssigningNewValues();
              MatBlock.pixelDomain=[];
 
         }
+    }
       
         var rTot=0;
         var gTot=0;
