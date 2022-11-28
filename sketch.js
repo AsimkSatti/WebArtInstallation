@@ -1,5 +1,6 @@
 var effectEnabled=false; 
 var originalVideo;
+var firstEntry=true;
 var pg;
 var kernel=[20,20];
 var kernelSize=kernel[0]*kernel[1];
@@ -27,6 +28,7 @@ class MatrixObscura{
         this.pixelDomain=[];
         this.avgLum;
 
+        this.prevRavg=0;
         this.rAvg=0;
         this.gAvg=0;
         this.bvg=0;
@@ -107,14 +109,28 @@ class MatrixObscura{
         // console.log(rAvg,gAvg,bAvg);
     }
     AssigningNewValues(){
-       // this.PreProcess();
+       // this.PreProcess();            
+            var newR = Math.random()*255;
+            var newG = Math.random()*255;
+            var newB = Math.random()*255;
            for (var i =0; i< this.pixelDomain.length; i++) {
+
                 var indexPointer=this.pixelDomain[i]+this.startI;
+                if(this.prevRavg!=this.rAvg && !firstEntry){
+                    capture.pixels[indexPointer]=newR;
+                    capture.pixels[indexPointer+1]=newG;
+                    capture.pixels[indexPointer+2]=newB;
+                }
+                else{
                 capture.pixels[indexPointer]=this.rAvg;
                 capture.pixels[indexPointer+1]=this.gAvg;
                 capture.pixels[indexPointer+2]=this.bAvg;
+                    
+                }
+            this.prevRavg = this.rAvg;
+        
         }
-
+    firstEntry=false;
     }
 
 }
@@ -155,11 +171,11 @@ function toggleEffect(){
     effectEnabled=!effectEnabled;
     if(effectEnabled){
  
-        document.getElementById("button").innerHTML = "Start Fun";
+        document.getElementById("button").innerHTML = "Stop Fun";
 
     }
     else{
-        document.getElementById("button").innerHTML = "Stop Fun";
+        document.getElementById("button").innerHTML = "Start Fun";
     }
 }
 // [r g b a] r g b a r g b a ...

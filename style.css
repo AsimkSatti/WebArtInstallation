@@ -1,5 +1,5 @@
 * {
-	/*background-color: #1a1a1a;*/
+	/* background-color: #f0e8ff; */
     font-family: sans-serif;
     padding: 0;
     border:0;
@@ -14,10 +14,41 @@
 
 h1{
     font-family:cyberPunk;
-    color: lightpink;
+    color: rgb(255, 222, 227);
+   
     opacity: 0.8;
  
     position: absolute;
+}
+
+h2{
+    font-size: 50px;
+    margin-left: 45%;
+    position: center;
+    padding:0;
+    display: inline-block;
+    position: absolute;
+    font-family: 'VT323', monospace;
+    /* background-color: rgb(172, 3, 198); */
+    color: rgb(69, 39, 241);
+    
+}
+img{
+    position: absolute;
+    margin-left:95%;
+}
+footer{
+    display: inline-block;
+    font-family:cyberPunk;
+    color: rgb(30, 30, 30);
+   margin-left: 45%;
+   margin-top: 45%;
+    opacity: 0.8;
+ 
+    position: absolute;
+}
+p{
+    display: inline-block;
 }
 canvas{
 	padding: 0;
