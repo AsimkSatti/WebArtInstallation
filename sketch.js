@@ -2,7 +2,7 @@ var effectEnabled=false;
 var originalVideo;
 var firstEntry=true;
 var pg;
-var kernel=[20,20];
+var kernel=[10,10];
 var kernelSize=kernel[0]*kernel[1];
 var pixToEdit=[];
 var capture;
@@ -10,9 +10,9 @@ var Kcount=0;
 var w = 960;
 var h = w*0.75;
 var sinx=0.000;
-var savedRandomR = Math.floor(Math.random() * 255);
-var savedRandomG = Math.floor(Math.random() * 255);
-var savedRandomB = Math.floor(Math.random() * 255);
+var obscuraDistance=20;
+
+var UpdateMatrix=false;
 
 var lstMatObsc=[];
 
@@ -134,8 +134,21 @@ class MatrixObscura{
     }
 
 }
+function divideImage(){
+    lstMatObsc=[];
+    for (var WMover=0;WMover<=(4*w);WMover+=obscuraDistance){
+        for (var HMover=0;HMover<int(h/kernel[1]);HMover+=1){
+                    // Hmover is the height delta aka how much to move down aka kernel[1](4*width) loops it
+                    var newpos= WMover+(4*width)*HMover*kernel[1]/2; 
+                    var block = new MatrixObscura(newpos,kernel);
+                    // console.log(newpos, WMover, width, HMover, kernel[1]);
+                    lstMatObsc.push(block);
+              }
+                }
+}
+
 function setup() {
-    var obscuraDistance=40;
+    var obscuraDistance=20;
     // pg=createGraphics(200,200);
     capture = createCapture({
         audio: false,
@@ -151,21 +164,13 @@ function setup() {
     createCanvas(w, h);
     createCanvas(w,h);
     capture.hide();
-    //originalVideo = capture;
-       for (var WMover=0;WMover<=(4*w);WMover+=obscuraDistance){
-            for (var HMover=0;HMover<int(h/kernel[1]);HMover+=1){
-                        // Hmover is the height delta aka how much to move down aka kernel[1](4*width) loops it
-                        var newpos= WMover+(4*width)*HMover*kernel[1]/2; 
-                        var block = new MatrixObscura(newpos,kernel);
-                        console.log(newpos, WMover, width, HMover, kernel[1]);
-                        lstMatObsc.push(block);
-                  }
-                    }
-       //         var block = new MatrixObscura(i,kernel);
-       // lstMatObsc.push(block);
-    
-    console.log(lstMatObsc.length);
+ 
+    divideImage();
+ 
+ 
 }
+
+
 
 function toggleEffect(){
     effectEnabled=!effectEnabled;
@@ -180,15 +185,28 @@ function toggleEffect(){
 }
 // [r g b a] r g b a r g b a ...
 function draw() {
-
-    // pg.background(100);
-   //image(capture, 0, 0, w, h);
+ 
      capture.loadPixels();
      var NewPix=capture.pixels;
-   //  originalVideo.loadPixels();
+ 
 
 
    //Filter
+   if(UpdateMatrix){
+        console.log("will update");
+        if(sliderVal<5){
+            sliderVal=5;
+        }
+        var newKSize = sliderVal;
+        
+        console.log(newKSize);
+        kernel=[newKSize,newKSize];
+        obscuraDistance=2*(newKSize);
+
+        // Recreate MatrixObscure
+        divideImage();
+        UpdateMatrix=false;
+   }
  
     if (capture.pixels.length > 0) { // don't forget this!
         var total = 0;

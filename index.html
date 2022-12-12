@@ -18,13 +18,31 @@
 <h1>WELCOMME HOMME</h1>
 
 <h2>INVENTORY</h2>
+<div class="slidecontainer">
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  </div>
 <footer>
-<p>Thank you, </p>
+<p>Matrix Obscura, </p>
 
-   <p>Asim</p>
+   <p></p>
 </footer>
 <img src="line.png" alt="gradientLine">
 <button id="button" onclick="toggleEffect()">Start Fun</button>
 </body>
     <script src="sketch.js"></script>
+    <script>
+        var sliderVal;
+
+        var slider = document.getElementById("myRange");
+        var output = document.getElementById("demo");
+        // output.innerHTML = slider.value; // Display the default slider value
+        console.log(slider.value);
+
+        // Update the current slider value (each time you drag the slider handle)
+        slider.oninput = function() {
+        
+            sliderVal= this.value;
+            UpdateMatrix=true;
+        }
+    </script>
 </html>
